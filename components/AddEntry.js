@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { getMetricMetaInfo } from '../utils/helpers';
+import DateHeader from './DateHeader';
 import UdaciSlider from './UdaciSlider';
 import UdaciSteppers from './UdaciSteppers';
 
@@ -55,6 +56,7 @@ class AddEntry extends Component {
 
           return (
             <View key={key}>
+              <DateHeader date={new Date().toLocaleDateString()} />
               {getIcon()}
               {type === 'slider' ? (
                 <UdaciSlider value={value} onChange={value => this.slide(key, value)} {...rest} />

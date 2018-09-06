@@ -1,8 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { Component } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
+import { connect } from 'react-redux';
+import { addEntry } from '../actions';
 import { removeEntry, submitEntry } from '../utils/api';
-import { getMetricMetaInfo, timeToString } from '../utils/helpers';
+import { getDailyReminderValue, getMetricMetaInfo, timeToString } from '../utils/helpers';
 import DateHeader from './DateHeader';
 import TextButton from './TextButton';
 import UdaciSlider from './UdaciSlider';
@@ -60,7 +62,11 @@ class AddEntry extends Component {
     const key = timeToString();
     const entry = this.state;
 
-    // Update Redux
+    this.props.dispatch(
+      addEntry({
+        [key]: entry
+      })
+    );
 
     this.setState({
       run: 0,
@@ -80,7 +86,11 @@ class AddEntry extends Component {
   reset = () => {
     const key = timeToString();
 
-    // Update Redux
+    this.props.dispatch(
+      addEntry({
+        [key]: getDailyReminderValue()
+      })
+    );
 
     // Route to Home
 
@@ -128,5 +138,15 @@ class AddEntry extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  const key = timeToString();
+
+  return {
+    alreadyLogged: state[key] && typeof state[key].today === 'undefined'
+  };
+}
+
+AddEntry = connect(mapStateToProps)(AddEntry);
 
 export default AddEntry;

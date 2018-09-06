@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { Component } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
+import { removeEntry, submitEntry } from '../utils/api';
 import { getMetricMetaInfo, timeToString } from '../utils/helpers';
 import DateHeader from './DateHeader';
 import TextButton from './TextButton';
@@ -71,7 +72,7 @@ class AddEntry extends Component {
 
     // Navigate to home
 
-    // Save to 'DB
+    submitEntry({ key, entry });
 
     // Clear local notification
   };
@@ -83,7 +84,7 @@ class AddEntry extends Component {
 
     // Route to Home
 
-    // Update "DB"
+    removeEntry(key);
   };
 
   render() {

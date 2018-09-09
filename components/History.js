@@ -1,3 +1,4 @@
+import { AppLoading } from 'expo';
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
@@ -8,7 +9,6 @@ import { white } from '../utils/colors';
 import { getDailyReminderValue, timeToString } from '../utils/helpers';
 import DateHeader from './DateHeader';
 import MetricCard from './MetricCard';
-import { AppLoading } from 'expo';
 
 class History extends Component {
   state = {
@@ -40,7 +40,7 @@ class History extends Component {
           <Text style={styles.noDataText}>{today}</Text>
         </View>
       ) : (
-        <TouchableOpacity onPress={() => console.log('Pressed!')}>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('EntryDetail', { entryId: key })}>
           <MetricCard metrics={metrics} date={formattedDate} />
         </TouchableOpacity>
       )}

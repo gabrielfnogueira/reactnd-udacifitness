@@ -1,6 +1,6 @@
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Platform, View } from 'react-native';
+import { Platform, View, StatusBar } from 'react-native';
 import { createBottomTabNavigator, createMaterialTopTabNavigator } from 'react-navigation';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
@@ -8,6 +8,15 @@ import AddEntry from './components/AddEntry';
 import History from './components/History';
 import reducer from './reducers';
 import { purple, white } from './utils/colors';
+import { Constants } from 'expo';
+
+function UdaciStatusBar({ backgroundColor, ...props }) {
+  return (
+    <View style={{ backgroundColor, height: Constants.statusBarHeight }}>
+      <StatusBar translucent backgroundColor={backgroundColor} {...props} />
+    </View>
+  );
+}
 
 const routes = {
   History: {
@@ -56,7 +65,7 @@ export default class App extends React.Component {
     return (
       <Provider store={createStore(reducer)}>
         <View style={{ flex: 1 }}>
-          <View style={{ height: 20 }} />
+          <UdaciStatusBar backgroundColor={purple} barStyle="light-content" />
           <Tabs />
         </View>
       </Provider>

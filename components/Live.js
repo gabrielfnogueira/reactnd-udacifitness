@@ -1,8 +1,8 @@
 import { Foundation } from '@expo/vector-icons';
+import { Location, Permissions } from 'expo';
 import React, { Component } from 'react';
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { purple, white } from '../utils/colors';
-import { Location, Permissions } from 'expo';
 import { calculateDirection } from '../utils/helpers';
 
 class Live extends Component {
@@ -14,7 +14,7 @@ class Live extends Component {
 
   componentDidMount() {
     Permissions.getAsync(Permissions.LOCATION)
-      .then(status => {
+      .then(({ status }) => {
         if (status === 'granted') {
           return this.setLocation();
         }
@@ -28,7 +28,17 @@ class Live extends Component {
       });
   }
 
-  askPermission = () => {};
+  askPermission = () => {
+    Permissions.askAsync(Permissions.LOCATION)
+      .then(({ status }) => {
+        if (status === 'granted') {
+          return this.setLocation();
+        }
+
+        this.setState({ status });
+      })
+      .catch(error => console.warn('error asking Location permission: ', error));
+  };
 
   setLocation = () => {
     Location.watchPositionAsync(
@@ -85,16 +95,16 @@ class Live extends Component {
       <View style={styles.container}>
         <View style={styles.directionContainer}>
           <Text style={styles.header}>You're heading</Text>
-          <Text style={styles.direction}>North</Text>
+          <Text style={styles.direction}>{direction}</Text>
         </View>
         <View style={styles.metricContainer}>
           <View style={styles.metric}>
             <Text style={[styles.header, { color: white }]}>Altitude</Text>
-            <Text style={[styles.subHeader, { color: white }]}>{200} Feet</Text>
+            <Text style={[styles.subHeader, { color: white }]}>{Math.round(coords.altitude)} Meters</Text>
           </View>
           <View style={styles.metric}>
             <Text style={[styles.header, { color: white }]}>Speed</Text>
-            <Text style={[styles.subHeader, { color: white }]}>{300} MPH</Text>
+            <Text style={[styles.subHeader, { color: white }]}>{(coords.speed * 3.6).toFixed(1)} KM/h</Text>
           </View>
         </View>
       </View>
